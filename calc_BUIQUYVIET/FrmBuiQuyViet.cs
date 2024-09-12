@@ -90,23 +90,6 @@ namespace calc_BUIQUYVIET
 
         private void buttonsquare_Click(object sender, EventArgs e)
         {
-            //string currentExpression = txtDisplay.Text;
-
-
-            //int openBrackets = currentExpression.Count(c => c == '(');
-            //int closeBrackets = currentExpression.Count(c => c == ')');
-
-            //if (openBrackets == closeBrackets)
-            //{
-            //    txtDisplay.Text += "(";
-            //}
-            //else
-            //{
-            //    if (char.IsDigit(currentExpression.Last()) || currentExpression.Last() == ')')
-            //    {
-            //        txtDisplay.Text += ")";
-            //    }
-            //}
             string currentExpression = txtDisplay.Text;
 
             int openBrackets = currentExpression.Count(c => c == '(');
@@ -175,15 +158,6 @@ namespace calc_BUIQUYVIET
             {
                 string expression = txtDisplay.Text;
 
-                //if (isNewCalculation)
-                //{
-                //    expression = txtDisplay.Text;
-                //}
-                //else
-                //{
-                //    //expression = previousResult.ToString() + txtDisplay.Text;
-                //    expression = txtDisplay.Text;
-                //}
                 if (expression.Contains("%"))
                 {
                     // Xóa ký tự '%' và chuyển đổi phần còn lại thành số
@@ -194,9 +168,9 @@ namespace calc_BUIQUYVIET
                     previousResult = Convert.ToDouble(value);
                     calculationHistory.Add($"{expression}% = {value}");
                     isNewCalculation = true;
-                    return; // Kết thúc hàm ở đây để không tính tiếp
+                    return; 
                 }
-
+                expression = expression.Replace(',', '.');
 
                 object result = EvaluateExpression(expression);
                 if (result != null)
@@ -346,7 +320,7 @@ namespace calc_BUIQUYVIET
                 if (!string.IsNullOrWhiteSpace(txtDisplay1.Text))
                 {
                     decimal value = Convert.ToDecimal(txtDisplay1.Text);
-                    value /= 100; // Tính phần trăm
+                    value /= 100;
 
                     txtDisplay.Text = value.ToString();
                 }
