@@ -17,7 +17,7 @@ namespace calc_BUIQUYVIET
             InitializeComponent();
 
         }
-        private double previousResult = 0; 
+        private double previousResult = 0;
         private bool isNewCalculation = true;
         private int clickCount = 0;
         List<string> calculationHistory = new List<string>();
@@ -28,6 +28,12 @@ namespace calc_BUIQUYVIET
             return table.Compute(expression, string.Empty);
         }
 
+        private void MakeButton(Button btn)
+        {
+            btn.FlatStyle = FlatStyle.Flat;
+            btn.FlatAppearance.BorderSize = 0;
+
+        }
 
         private void MakeButtonRound(Button btn)
         {
@@ -38,7 +44,7 @@ namespace calc_BUIQUYVIET
             btn.ForeColor = Color.AliceBlue;
 
             btn.Font = new Font("Arial", 12, FontStyle.Bold);
-            btn.FlatStyle = FlatStyle.Flat; // Hoặc FlatStyle.Popup
+            btn.FlatStyle = FlatStyle.Flat;
             btn.FlatAppearance.BorderSize = 0;
         }
 
@@ -72,20 +78,58 @@ namespace calc_BUIQUYVIET
             MakeButtonRound(buttoncomma);
             MakeButtonRound(buttonMulti);
 
+            MakeButton(btnHistory);
+            MakeButton(btnClearHistory);
+            MakeButton(btnDelete);
+            MakeButton(btnMaxnimize);
+            MakeButton(btnMinimize);
+            MakeButton(btnClose);
+            MakeButton(btnMenu);
+
         }
 
         private void buttonsquare_Click(object sender, EventArgs e)
         {
-            
-                clickCount++;
+            //string currentExpression = txtDisplay.Text;
 
-            if (clickCount % 2 == 1)
+
+            //int openBrackets = currentExpression.Count(c => c == '(');
+            //int closeBrackets = currentExpression.Count(c => c == ')');
+
+            //if (openBrackets == closeBrackets)
+            //{
+            //    txtDisplay.Text += "(";
+            //}
+            //else
+            //{
+            //    if (char.IsDigit(currentExpression.Last()) || currentExpression.Last() == ')')
+            //    {
+            //        txtDisplay.Text += ")";
+            //    }
+            //}
+            string currentExpression = txtDisplay.Text;
+
+            int openBrackets = currentExpression.Count(c => c == '(');
+            int closeBrackets = currentExpression.Count(c => c == ')');
+
+            // Kiểm tra ký tự cuối cùng
+            bool lastCharIsOperator = currentExpression.Length > 0 &&
+                                      "+-*/%".Contains(currentExpression.Last());
+
+            // Thêm dấu ngoặc mở chỉ nếu ký tự cuối là toán tử hoặc biểu thức rỗng
+            if (lastCharIsOperator || currentExpression.Length == 0)
             {
                 txtDisplay.Text += "(";
             }
-            else
+            // Thêm dấu ngoặc đóng nếu ký tự cuối là số hoặc dấu ngoặc đóng
+            else if (currentExpression.Length > 0 &&
+                     (char.IsDigit(currentExpression.Last()) || currentExpression.Last() == ')'))
             {
-                txtDisplay.Text += ")";
+                // Chỉ thêm dấu ngoặc đóng nếu số lượng dấu ngoặc mở lớn hơn số lượng dấu ngoặc đóng
+                if (openBrackets > closeBrackets)
+                {
+                    txtDisplay.Text += ")";
+                }
             }
         }
 
@@ -118,148 +162,93 @@ namespace calc_BUIQUYVIET
         {
             txtDisplay.Clear();
             txtDisplay1.Clear();
-            //lblResult.Text = string.Empty;
         }
 
-        private string InfixToPostfix(string expression)
-        {
-            Stack<char> operators = new Stack<char>();
-            StringBuilder output = new StringBuilder();
-            Dictionary<char, int> precedence = new Dictionary<char, int>
-    {
-        { '+', 1 },
-        { '-', 1 },
-        { '*', 2 },
-        { '/', 2 }
-    };
 
-            foreach (char token in expression)
-            {
-                if (char.IsDigit(token) || token == '.') // Nếu là số hoặc dấu chấm (phân số)
-                {
-                    output.Append(token);
-                }
-                else if (token == '(')
-                {
-                    operators.Push(token);
-                }
-                else if (token == ')')
-                {
-                    while (operators.Count > 0 && operators.Peek() != '(')
-                    {
-                        output.Append(' ').Append(operators.Pop());
-                    }
-                    operators.Pop(); // Loại bỏ dấu '(' khỏi ngăn xếp
-                }
-                else if (precedence.ContainsKey(token))
-                {
-                    output.Append(' '); // Thêm dấu cách trước khi thêm toán tử
-                    while (operators.Count > 0 && precedence.ContainsKey(operators.Peek()) && precedence[operators.Peek()] >= precedence[token])
-                    {
-                        output.Append(operators.Pop()).Append(' ');
-                    }
-                    operators.Push(token);
-                }
-            }
 
-            while (operators.Count > 0)
-            {
-                output.Append(' ').Append(operators.Pop());
-            }
 
-            return output.ToString();
-        }
 
-        private double EvaluatePostfix(string postfixExpression)
-        {
-            Stack<double> stack = new Stack<double>();
-            string[] tokens = postfixExpression.Split(' ');
-
-            foreach (string token in tokens)
-            {
-                if (double.TryParse(token, out double number))
-                {
-                    stack.Push(number);
-                }
-                else
-                {
-                    double operand2 = stack.Pop();
-                    double operand1 = stack.Pop();
-
-                    switch (token)
-                    {
-                        case "+":
-                            stack.Push(operand1 + operand2);
-                            break;
-                        case "-":
-                            stack.Push(operand1 - operand2);
-                            break;
-                        case "*":
-                            stack.Push(operand1 * operand2);
-                            break;
-                        case "/":
-                            stack.Push(operand1 / operand2);
-                            break;
-                    }
-                }
-            }
-
-            return stack.Pop();
-        }
 
         private void buttonequal_Click(object sender, EventArgs e)
         {
             try
             {
-                string expression;
+                string expression = txtDisplay.Text;
 
-                if (isNewCalculation)
+                //if (isNewCalculation)
+                //{
+                //    expression = txtDisplay.Text;
+                //}
+                //else
+                //{
+                //    //expression = previousResult.ToString() + txtDisplay.Text;
+                //    expression = txtDisplay.Text;
+                //}
+                if (expression.Contains("%"))
                 {
-                    expression = txtDisplay.Text;
+                    // Xóa ký tự '%' và chuyển đổi phần còn lại thành số
+                    expression = expression.Replace("%", "").Trim();
+                    decimal value = Convert.ToDecimal(expression) / 100;
+                    txtDisplay1.Text = FormatNumber(value); // Cập nhật txtDisplay1
+                    txtDisplay.Text = value.ToString(); // Cập nhật txtDisplay
+                    previousResult = Convert.ToDouble(value);
+                    calculationHistory.Add($"{expression}% = {value}");
+                    isNewCalculation = true;
+                    return; // Kết thúc hàm ở đây để không tính tiếp
                 }
-                else
+
+
+                object result = EvaluateExpression(expression);
+                if (result != null)
                 {
-                    expression = previousResult.ToString() + txtDisplay.Text;
+
+                    txtDisplay1.Text = FormatNumber(Convert.ToDecimal(result));
+                    txtDisplay.Text = result.ToString();
+
+                    previousResult = Convert.ToDouble(result);
+                    calculationHistory.Add($"{expression} = {result}");
+
+                    if (listBoxHistory.Visible)
+                    {
+                        listBoxHistory.Items.Add($"{expression} = {result}");
+                    }
+                    isNewCalculation = true;
                 }
-
-                string postfixExpression = InfixToPostfix(expression);
-
-                double result = EvaluatePostfix(postfixExpression);
-
-                txtDisplay1.Text = FormatNumber((decimal)result);
-
-                txtDisplay.Text = result.ToString();
-
-                previousResult = result;
-
-                calculationHistory.Add($"{expression} = {result}");
-
-                isNewCalculation = true;
             }
             catch (Exception ex)
             {
-                MessageBox.Show("Biểu thức không hợp lệ: " + ex.Message);
+                MessageBox.Show($"An error occurred: {ex.Message}");
             }
+
+
         }
 
-       
+
 
         private string FormatNumber(decimal number)
         {
-            return number.ToString("#,0.##"); // Định dạng số với dấu phẩy
+            return number.ToString("#,0.##");
         }
 
         private void Button_Click(object sender, EventArgs e)
         {
-            Button button = (Button)sender;
+            //Button button = (Button)sender;
 
-            if (isNewCalculation)
+            //txtDisplay.Text += button.Text;
+            Button button = (Button)sender;
+            string buttonText = button.Text;
+
+            if (txtDisplay.Text.Length > 0)
             {
-                txtDisplay.Clear(); 
-                isNewCalculation = false;
+                char lastChar = txtDisplay.Text[txtDisplay.Text.Length - 1];
+
+                if ("*/+%".Contains(lastChar) && "*/+%".Contains(buttonText))
+                {
+                    return; 
+                }
             }
 
-            txtDisplay.Text += button.Text;
+            txtDisplay.Text += buttonText;
         }
 
 
@@ -276,12 +265,13 @@ namespace calc_BUIQUYVIET
                 string[] parts = currentExpression.Split(new char[] { '+', '-', '*', '/' }, StringSplitOptions.RemoveEmptyEntries);
                 string lastPart = parts.Last();
 
-                if (!lastPart.Contains(",") && !lastPart.Contains("."))
+                if (!lastPart.Contains("."))
                 {
                     txtDisplay.Text += ".";
                 }
             }
         }
+
 
         private void richTextBox1_TextChanged(object sender, EventArgs e)
         {
@@ -300,8 +290,19 @@ namespace calc_BUIQUYVIET
 
         private void btnHistory_Click(object sender, EventArgs e)
         {
-            string history = string.Join(Environment.NewLine, calculationHistory);
-            MessageBox.Show(history, "Calculation History");
+
+            listBoxHistory.Visible = !listBoxHistory.Visible;
+
+            btnClearHistory.Visible = listBoxHistory.Visible;
+
+            if (listBoxHistory.Visible)
+            {
+                listBoxHistory.Items.Clear();
+                foreach (var historyItem in calculationHistory)
+                {
+                    listBoxHistory.Items.Add(historyItem);
+                }
+            }
 
         }
 
@@ -313,7 +314,6 @@ namespace calc_BUIQUYVIET
         private void btnMaxnimize_Click(object sender, EventArgs e)
         {
             this.WindowState = FormWindowState.Maximized;
-
         }
 
         private void btnClose_Click(object sender, EventArgs e)
@@ -328,20 +328,28 @@ namespace calc_BUIQUYVIET
 
         private void btnDelete_Click(object sender, EventArgs e)
         {
-            if (txtDisplay.Text.Length > 0)
+            if (txtDisplay.Text.Length > 1)
             {
                 txtDisplay.Text = txtDisplay.Text.Substring(0, txtDisplay.Text.Length - 1);
             }
-
+            else
+            {
+                txtDisplay.Clear();
+                txtDisplay1.Clear();
+            }
         }
 
         private void buttonpercent_Click_1(object sender, EventArgs e)
         {
             try
             {
-                decimal value = Convert.ToDecimal(txtDisplay.Text);
-                value /= 100;
-                txtDisplay.Text = value.ToString();
+                if (!string.IsNullOrWhiteSpace(txtDisplay1.Text))
+                {
+                    decimal value = Convert.ToDecimal(txtDisplay1.Text);
+                    value /= 100; // Tính phần trăm
+
+                    txtDisplay.Text = value.ToString();
+                }
             }
             catch
             {
@@ -350,7 +358,7 @@ namespace calc_BUIQUYVIET
         }
 
 
-       
+
 
         private void buttonplus_Click(object sender, EventArgs e)
         {
@@ -365,17 +373,53 @@ namespace calc_BUIQUYVIET
 
         private void buttonMulti_Click(object sender, EventArgs e)
         {
-            if (!string.IsNullOrEmpty(txtDisplay.Text))
+            try
             {
-               if(txtDisplay.Text.StartsWith("-"))
+                if (!string.IsNullOrWhiteSpace(txtDisplay.Text))
                 {
-                    txtDisplay.Text = txtDisplay.Text.Substring(1);
-                }
-                else
-                {
-                    txtDisplay.Text = "-" + txtDisplay.Text;
+                    if (txtDisplay.Text.StartsWith("-"))
+                    {
+                        txtDisplay.Text = txtDisplay.Text.Substring(1); // Bỏ dấu âm
+                    }
+                    else
+                    {
+                        txtDisplay.Text = "-" + txtDisplay.Text;
+                    }
                 }
             }
+            catch (Exception ex)
+            {
+                MessageBox.Show($"Đã xảy ra lỗi: {ex.Message}");
+            }
+        }
+
+        private void btnClearHistory_Click(object sender, EventArgs e)
+        {
+            DialogResult result = MessageBox.Show("Bạn có chắc chắn muốn xóa lịch sử không?",
+                                           "Xác nhận",
+                                           MessageBoxButtons.YesNo,
+                                           MessageBoxIcon.Warning);
+
+            if (result == DialogResult.Yes)
+            {
+                calculationHistory.Clear();
+                listBoxHistory.Items.Clear();
+            }
+        }
+
+        private void listBoxHistory_SelectedIndexChanged(object sender, EventArgs e)
+        {
+
+        }
+
+        private void pnlHistory_Paint(object sender, PaintEventArgs e)
+        {
+
+        }
+
+        private void txtDisplay_KeyPress(object sender, KeyPressEventArgs e)
+        {
+
         }
     }
 }

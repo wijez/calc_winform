@@ -62,6 +62,7 @@
             btnHistory = new Button();
             btnDelete = new Button();
             txtDisplay1 = new TextBox();
+            listBoxHistory = new ListBox();
             pnlHistory.SuspendLayout();
             pnlTitle.SuspendLayout();
             panel1.SuspendLayout();
@@ -79,6 +80,7 @@
             txtDisplay.TabIndex = 0;
             txtDisplay.TextAlign = HorizontalAlignment.Right;
             txtDisplay.TextChanged += txtDisplay_TextChanged;
+            txtDisplay.KeyPress += txtDisplay_KeyPress;
             // 
             // lblResult
             // 
@@ -314,27 +316,32 @@
             // 
             // pnlHistory
             // 
+            pnlHistory.BackColor = SystemColors.WindowFrame;
             pnlHistory.Controls.Add(btnClearHistory);
             pnlHistory.Dock = DockStyle.Bottom;
-            pnlHistory.Location = new Point(0, 462);
+            pnlHistory.Location = new Point(0, 454);
             pnlHistory.Margin = new Padding(0);
             pnlHistory.Name = "pnlHistory";
-            pnlHistory.Size = new Size(356, 7);
+            pnlHistory.Size = new Size(356, 46);
             pnlHistory.TabIndex = 24;
+            pnlHistory.Paint += pnlHistory_Paint;
             // 
             // btnClearHistory
             // 
-            btnClearHistory.Dock = DockStyle.Bottom;
+            btnClearHistory.BackColor = SystemColors.ButtonFace;
             btnClearHistory.FlatAppearance.MouseOverBackColor = Color.Yellow;
             btnClearHistory.FlatStyle = FlatStyle.Flat;
             btnClearHistory.ForeColor = SystemColors.ActiveBorder;
             btnClearHistory.Image = (Image)resources.GetObject("btnClearHistory.Image");
-            btnClearHistory.Location = new Point(0, -31);
-            btnClearHistory.Margin = new Padding(0);
+            btnClearHistory.Location = new Point(10, 0);
+            btnClearHistory.Margin = new Padding(20);
             btnClearHistory.Name = "btnClearHistory";
-            btnClearHistory.Size = new Size(356, 38);
+            btnClearHistory.Padding = new Padding(5);
+            btnClearHistory.Size = new Size(336, 46);
             btnClearHistory.TabIndex = 2;
-            btnClearHistory.UseVisualStyleBackColor = true;
+            btnClearHistory.UseVisualStyleBackColor = false;
+            btnClearHistory.Visible = false;
+            btnClearHistory.Click += btnClearHistory_Click;
             // 
             // btnClose
             // 
@@ -459,12 +466,26 @@
             txtDisplay1.TextAlign = HorizontalAlignment.Right;
             txtDisplay1.TextChanged += txtDisplay1_TextChanged;
             // 
+            // listBoxHistory
+            // 
+            listBoxHistory.BackColor = SystemColors.WindowFrame;
+            listBoxHistory.ForeColor = SystemColors.ActiveCaptionText;
+            listBoxHistory.FormattingEnabled = true;
+            listBoxHistory.ItemHeight = 19;
+            listBoxHistory.Location = new Point(1, 162);
+            listBoxHistory.Name = "listBoxHistory";
+            listBoxHistory.Size = new Size(355, 289);
+            listBoxHistory.TabIndex = 29;
+            listBoxHistory.Visible = false;
+            listBoxHistory.SelectedIndexChanged += listBoxHistory_SelectedIndexChanged;
+            // 
             // FrmBuiQuyViet
             // 
             AutoScaleDimensions = new SizeF(9F, 19F);
             AutoScaleMode = AutoScaleMode.Font;
             BackColor = SystemColors.ControlDarkDark;
-            ClientSize = new Size(356, 469);
+            ClientSize = new Size(356, 500);
+            Controls.Add(listBoxHistory);
             Controls.Add(txtDisplay1);
             Controls.Add(btnDelete);
             Controls.Add(txtDisplay);
@@ -494,7 +515,9 @@
             Controls.Add(lblResult);
             Font = new Font("Gadugi", 12F, FontStyle.Regular, GraphicsUnit.Point, 0);
             FormBorderStyle = FormBorderStyle.None;
+            Icon = (Icon)resources.GetObject("$this.Icon");
             Margin = new Padding(4);
+            MaximumSize = new Size(356, 500);
             Name = "FrmBuiQuyViet";
             StartPosition = FormStartPosition.CenterScreen;
             Text = "FrmBuiQuyViet";
@@ -541,5 +564,6 @@
         private Button btnClearHistory;
         private Button btnDelete;
         private TextBox txtDisplay1;
+        private ListBox listBoxHistory;
     }
 }
