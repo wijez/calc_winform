@@ -174,10 +174,11 @@
   </data>
   <data name="btnDelete.Image" type="System.Drawing.Bitmap, System.Drawing" mimetype="application/x-microsoft.net.object.bytearray.base64">
     <value>
-        iVBORw0KGgoAAAANSUhEUgAAABgAAAAYCAYAAADgdz34AAAABGdBTUEAALGPC/xhBQAAAAlwSFlzAAAL
-        DAAACwwBP0AiyAAAAI9JREFUSEvtlDEOwjAQBP28wKdCyTuTh8BtcSsrmtgSOgRFRprmxj53bhd/wz3c
-        w1eR2nULTeXydAsNHajQUKzQUDy6wmymodir5YLaSEMxzeWC+khDUfbLz6B7qaEon+EMupcaimn/CPWR
-        hmJvPkJtpKF49AGzmYZihYZihebrn52+Vg3o4Cdq1xJe/JzW3g3zQSafKcjHAAAAAElFTkSuQmCC
+        iVBORw0KGgoAAAANSUhEUgAAABgAAAAYCAYAAADgdz34AAAAAXNSR0IArs4c6QAAAARnQU1BAACxjwv8
+        YQUAAAAJcEhZcwAACxIAAAsSAdLdfvwAAACPSURBVEhL7ZQxDsIwEAT9vMCnQsk7k4fAbXErK5rYEjoE
+        RUaa5sY+d24Xf8M93MNXkdp1C03l8nQLDR2o0FCs0FA8usJspqHYq+WC2khDMc3lgvpIQ1H2y8+ge6mh
+        KJ/hDLqXGopp/wj1kYZibz5CbaShePQBs5mGYoWGYoXm65+dvlYN6OAnatcSXvyc1t4N80EmnynIxwAA
+        AABJRU5ErkJggg==
 </value>
   </data>
   <data name="$this.Icon" type="System.Drawing.Icon, System.Drawing" mimetype="application/x-microsoft.net.object.bytearray.base64">

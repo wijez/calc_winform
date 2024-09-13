@@ -19,7 +19,6 @@ namespace calc_BUIQUYVIET
         }
         private double previousResult = 0;
         private bool isNewCalculation = true;
-        private int clickCount = 0;
         List<string> calculationHistory = new List<string>();
 
         private object EvaluateExpression(string expression)
@@ -46,6 +45,25 @@ namespace calc_BUIQUYVIET
             btn.Font = new Font("Arial", 12, FontStyle.Bold);
             btn.FlatStyle = FlatStyle.Flat;
             btn.FlatAppearance.BorderSize = 0;
+        }
+
+        private string GetLastOperator(string expression, out string lastNumber)
+        {
+            char[] operators = { '+', '-', '*', '/' };
+            lastNumber = string.Empty;
+
+            foreach (char op in operators)
+            {
+                int index = expression.LastIndexOf(op);
+                if (index != -1)
+                {
+                    lastNumber = expression.Substring(index + 1).Trim();
+                    return op.ToString();
+                }
+            }
+
+            lastNumber = expression.Trim();
+            return "+";
         }
 
         private void txtDisplay_TextChanged(object sender, EventArgs e)
@@ -148,10 +166,6 @@ namespace calc_BUIQUYVIET
         }
 
 
-
-
-
-
         private void buttonequal_Click(object sender, EventArgs e)
         {
             try
@@ -160,17 +174,32 @@ namespace calc_BUIQUYVIET
 
                 if (expression.Contains("%"))
                 {
-                    // Xóa ký tự '%' và chuyển đổi phần còn lại thành số
                     expression = expression.Replace("%", "").Trim();
                     decimal value = Convert.ToDecimal(expression) / 100;
-                    txtDisplay1.Text = FormatNumber(value); // Cập nhật txtDisplay1
-                    txtDisplay.Text = value.ToString(); // Cập nhật txtDisplay
+                    txtDisplay1.Text = FormatNumber(value);
+                    txtDisplay.Text = value.ToString();
                     previousResult = Convert.ToDouble(value);
                     calculationHistory.Add($"{expression}% = {value}");
                     isNewCalculation = true;
-                    return; 
+                    return;
                 }
                 expression = expression.Replace(',', '.');
+
+                if (expression.Contains("="))
+                {
+                    string[] parts = expression.Split('=');
+                    expression = parts[0].Trim();
+                }
+
+                // Nếu đã có kết quả trước đó, thêm vào biểu thức để tính tiếp
+                if (isNewCalculation)
+                {
+                    // Lấy toán tử và số hạng cuối cùng từ biểu thức
+                    string lastOperator = GetLastOperator(expression, out string lastNumber);
+                    expression = previousResult + " " + lastOperator + " " + lastNumber;
+                }
+
+
 
                 object result = EvaluateExpression(expression);
                 if (result != null)
@@ -198,7 +227,6 @@ namespace calc_BUIQUYVIET
         }
 
 
-
         private string FormatNumber(decimal number)
         {
             return number.ToString("#,0.##");
@@ -206,9 +234,6 @@ namespace calc_BUIQUYVIET
 
         private void Button_Click(object sender, EventArgs e)
         {
-            //Button button = (Button)sender;
-
-            //txtDisplay.Text += button.Text;
             Button button = (Button)sender;
             string buttonText = button.Text;
 
@@ -218,7 +243,7 @@ namespace calc_BUIQUYVIET
 
                 if ("*/+%".Contains(lastChar) && "*/+%".Contains(buttonText))
                 {
-                    return; 
+                    return;
                 }
             }
 
@@ -332,19 +357,6 @@ namespace calc_BUIQUYVIET
         }
 
 
-
-
-        private void buttonplus_Click(object sender, EventArgs e)
-        {
-
-        }
-
-
-        private void buttonminus_Click(object sender, EventArgs e)
-        {
-
-        }
-
         private void buttonMulti_Click(object sender, EventArgs e)
         {
             try
@@ -353,7 +365,7 @@ namespace calc_BUIQUYVIET
                 {
                     if (txtDisplay.Text.StartsWith("-"))
                     {
-                        txtDisplay.Text = txtDisplay.Text.Substring(1); // Bỏ dấu âm
+                        txtDisplay.Text = txtDisplay.Text.Substring(1);
                     }
                     else
                     {
