@@ -81,7 +81,6 @@
             txtDisplay.TabIndex = 0;
             txtDisplay.TextAlign = HorizontalAlignment.Right;
             txtDisplay.TextChanged += txtDisplay_TextChanged;
-            txtDisplay.KeyPress += txtDisplay_KeyPress;
             // 
             // lblResult
             // 

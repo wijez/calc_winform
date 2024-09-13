@@ -5,6 +5,7 @@ using System.Data;
 using System.Drawing;
 using System.Linq;
 using System.Text;
+using System.Text.RegularExpressions;
 using System.Threading.Tasks;
 using System.Windows.Forms;
 
@@ -18,6 +19,7 @@ namespace calc_BUIQUYVIET
 
         }
         private double previousResult = 0;
+        private string previousExpression = "";
         private bool isNewCalculation = true;
         List<string> calculationHistory = new List<string>();
 
@@ -164,8 +166,6 @@ namespace calc_BUIQUYVIET
             txtDisplay.Clear();
             txtDisplay1.Clear();
         }
-
-
         private void buttonequal_Click(object sender, EventArgs e)
         {
             try
@@ -185,21 +185,19 @@ namespace calc_BUIQUYVIET
                 }
                 expression = expression.Replace(',', '.');
 
-                if (expression.Contains("="))
-                {
-                    string[] parts = expression.Split('=');
-                    expression = parts[0].Trim();
-                }
-
-                // Nếu đã có kết quả trước đó, thêm vào biểu thức để tính tiếp
                 if (isNewCalculation)
                 {
-                    // Lấy toán tử và số hạng cuối cùng từ biểu thức
-                    string lastOperator = GetLastOperator(expression, out string lastNumber);
-                    expression = previousResult + " " + lastOperator + " " + lastNumber;
+                    // Retrieve last operator and last number
+                    string lastOperator = GetLastOperator(previousExpression, out string lastNumber);
+
+                    // Construct the new expression using previous result
+                    expression = $"{previousResult} {lastOperator} {lastNumber}";
                 }
-
-
+                else
+                {
+                    // Store the current expression for future use
+                    previousExpression = expression;
+                }
 
                 object result = EvaluateExpression(expression);
                 if (result != null)
@@ -222,10 +220,7 @@ namespace calc_BUIQUYVIET
             {
                 MessageBox.Show($"An error occurred: {ex.Message}");
             }
-
-
         }
-
 
         private string FormatNumber(decimal number)
         {
@@ -399,11 +394,6 @@ namespace calc_BUIQUYVIET
         }
 
         private void pnlHistory_Paint(object sender, PaintEventArgs e)
-        {
-
-        }
-
-        private void txtDisplay_KeyPress(object sender, KeyPressEventArgs e)
         {
 
         }
