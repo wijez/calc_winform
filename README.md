@@ -1,4 +1,8 @@
 caculate winform app
+- If error MSB3821 appears then
+        Step 1: Turn on the terminal
+        Step 2: Enter the command
+        $ Unblock-File -Path "path-to\FrmBuiQuyViet.resx"
 - function :
     + Enter a decimal number, correctly formatted (eg:: 1234567,89 1.234.567,89)
     + Implement button C function
